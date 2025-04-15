@@ -27,6 +27,9 @@ namespace RpgApi.Controllers
             try
             {
                 Personagem p = await _context.TB_PERSONAGENS
+                .Include(ar => ar.Arma)
+                .Include(ph => ph.PersonagemHabilidades)
+                .ThenInclude(h =>h.Habilidade)
                             .FirstOrDefaultAsync(pBusca => pBusca.Id == id);
 
                 return Ok(p);
@@ -99,5 +102,24 @@ namespace RpgApi.Controllers
                 return BadRequest(ex.Message + " - " + ex.InnerException);
             }
         }
+        [HttpGet("GetUsuarioDoPersonagem")]
+            public async Task<IActionResult> GetUsuarioDoPersonagem(int id)
+            {
+                try
+                {
+                    var personagem = await _context.TB_PERSONAGENS
+                        .Include(p => p.Usuario) // Inclui os dados do usuário relacionado
+                        .FirstOrDefaultAsync(p => p.Id == id);
+
+                    if (personagem == null)
+                        return NotFound("Personagem não encontrado.");
+
+                    return Ok(personagem.Usuario);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest($"Erro ao buscar usuário do personagem: {ex.Message}");
+                }
+            }    
     }
 }
