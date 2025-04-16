@@ -19,12 +19,16 @@ namespace RpgApi.Controllers
             _context = context;
         }
 
-        [HttpGet("GetByPersonagemId")]
+        [HttpGet("GetByPersonagemId/{PersonagemId}")]
         public async Task<ActionResult<List<PersonagemHabilidade>>> GetByPersonagemId(int personagemId)
         {
-            return await _context.TB_PERSONAGENS_HABILIDADES
-                .Where(ph => ph.PersonagemId == personagemId)
-                .ToListAsync();
+        var habilidades = await _context.TB_PERSONAGENS_HABILIDADES
+            .Where(ph => ph.PersonagemId == personagemId)
+            .Include(ph => ph.Habilidade)
+            .Select(ph => ph.Habilidade)
+            .ToListAsync();
+
+    return Ok(habilidades);
         }
 
         [HttpGet("GetHabilidades")]
