@@ -30,6 +30,7 @@ namespace RpgApi.Controllers
                 .Include(ar => ar.Arma)
                 .Include(ph => ph.PersonagemHabilidades)
                 .ThenInclude(h =>h.Habilidade)
+                .Include(u => u.Usuario)
                             .FirstOrDefaultAsync(pBusca => pBusca.Id == id);
 
                 return Ok(p);
