@@ -30,6 +30,7 @@
                 </ListView.ItemTemplate>
 
             </ListView>
+            <Button Command="{Binding NovoPersonagemCommand}" Text="Novo" HorizontalOptions="End"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
